@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Suicide Prediction Model</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .background-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .field-info {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .prediction {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .prediction h3 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 2;
+            left: 50%;
+            height: auto;
+            width: 550px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-wrapper">
+        <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRL4yeZlHAi0MZJE3wFXdGP7xoAu1vJOWMgLlVxzjlpMm5OMOKr" alt="Suicide image" class="background-image">
+    </div>
+
+    <div class="container">
+        <h2>Suicide Cases Prediction</h2>
+
+        <form action="{{ url_for('predict') }}" method="post">
+            <div class="form-group">
+                <label>Type:</label>
+                <div class="field-info">Select the category of incident or type manually.</div>
+                <input list="type-options" name="type" required>
+                <datalist id="type-options">
+                    {% for category in type_categories %}
+                    <option value="{{ category }}">
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label>Age Group:</label>
+                <div class="field-info">Select the age range or type manually.</div>
+                <input list="age-options" name="age_group" required>
+                <datalist id="age-options">
+                    {% for category in age_categories %}
+                    <option value="{{ category }}">
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label>Gender:</label>
+                <div class="field-info">Select gender or type manually.</div>
+                <input list="gender-options" name="gender" required>
+                <datalist id="gender-options">
+                    {% for category in gender_categories %}
+                    <option value="{{ category }}">
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label>State:</label>
+                <div class="field-info">Select the state or type manually.</div>
+                <input list="state-options" name="state" required>
+                <datalist id="state-options">
+                    {% for state in state_categories %}
+                    <option value="{{ state }}">
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label>Year:</label>
+                <div class="field-info">Select the year for prediction or type manually.</div>
+                <input list="year-options" name="year" required>
+                <datalist id="year-options">
+                    {% for year in year_categories %}
+                    <option value="{{ year }}">
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction_text %}
+        <div class="prediction">
+            <h3>Result:</h3>
+            <p>{{ prediction_text }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>
